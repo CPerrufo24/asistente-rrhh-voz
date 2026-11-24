@@ -124,8 +124,15 @@ function crearMensaje(rol, texto, claseExtra = '') {
 }
 
 function actualizarMensaje(nodo, texto, final = false) {
+  // Gemini Live manda las transcripciones parciales como fragmentos: se acumulan.
+  // La final trae el texto completo y lo reemplaza.
   const contenido = nodo.querySelector('.contenido');
-  contenido.textContent = texto;
+  if (final) {
+    contenido.textContent = texto;
+  } else {
+    nodo.dataset.acumulado = (nodo.dataset.acumulado || '') + texto;
+    contenido.textContent = nodo.dataset.acumulado;
+  }
   nodo.classList.toggle('parcial', !final);
   refs.mensajes.scrollTop = refs.mensajes.scrollHeight;
 }
@@ -252,7 +259,7 @@ async function iniciarVoz() {
         const mensaje = JSON.parse(evento.data);
         if (mensaje.tipo === 'usuario') {
           const nodo = asegurarMensajeVoz('usuario');
-          actualizarMensaje(nodo, mensaje.texto || '...', mensaje.final);
+          actualizarMensaje(nodo, mensaje.texto || '', mensaje.final);
           if (mensaje.final) {
             estado.mensajeActivoUsuario = null;
           }
@@ -261,7 +268,7 @@ async function iniciarVoz() {
         if (mensaje.tipo === 'agente') {
           setEstadoVoz('El agente habla', 'habla');
           const nodo = asegurarMensajeVoz('agente');
-          actualizarMensaje(nodo, mensaje.texto || '...', mensaje.final);
+          actualizarMensaje(nodo, mensaje.texto || '', mensaje.final);
           if (mensaje.final) {
             estado.mensajeActivoAgente = null;
             setEstadoVoz('Escuchando', 'escuchando');
@@ -277,6 +284,8 @@ async function iniciarVoz() {
           return;
         }
         if (mensaje.tipo === 'turno_completo') {
+          estado.mensajeActivoUsuario = null;
+          estado.mensajeActivoAgente = null;
           setEstadoVoz('Escuchando', 'escuchando');
           return;
         }
