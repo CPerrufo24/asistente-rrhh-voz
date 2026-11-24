@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Asistente de RRHH</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Logística Andrómeda</p>
+          <h1>Asistente de RRHH · Logística Andrómeda</h1>
+          <p class="subtitulo">
+            Chat de texto, voz en vivo y trazabilidad de herramientas en un solo lugar.
+          </p>
+        </div>
+        <div class="acciones-hero">
+          <button id="nuevaConversacion" class="secundario">Nueva conversación</button>
+          <button id="vozBtn" class="principal">Hablar</button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel conversacion">
+          <div class="barra-estado">
+            <span id="estadoVoz" class="estado">Inactivo</span>
+            <span id="estadoChat" class="estado tenue">Listo para escribir</span>
+          </div>
+
+          <div id="chipsRapidos" class="chips"></div>
+
+          <div id="mensajes" class="mensajes" aria-live="polite"></div>
+
+          <div class="composer">
+            <textarea
+              id="mensajeInput"
+              rows="3"
+              placeholder="Escribe tu consulta de RRHH…"
+            ></textarea>
+            <div class="composer-acciones">
+              <button id="enviarBtn" class="principal">Enviar</button>
+            </div>
+          </div>
+          <p id="errorChat" class="error" hidden></p>
+        </section>
+
+        <aside class="panel traza-panel">
+          <div class="panel-header">
+            <h2>Traza</h2>
+            <p>Herramientas llamadas, fuentes, latencia y tokens de la última respuesta.</p>
+          </div>
+          <div id="metadatosUltimaRespuesta" class="metadatos"></div>
+          <div id="trazaLista" class="traza-lista"></div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
