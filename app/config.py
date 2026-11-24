@@ -15,4 +15,4 @@ RUTA_TRAZAS = Path(os.getenv("RUTA_TRAZAS", RAIZ / "var" / "trazas.jsonl"))
 
 MODELO_TEXTO = os.getenv("MODELO_TEXTO", "gemini-3.5-flash-lite")
 MODELO_VOZ = os.getenv("MODELO_VOZ", "gemini-3.8-live")
-VERSION_PROMPT = os.getenv("VERSION_PROMPT", "v1")
+VERSION_PROMPT = os.getenv("VERSION_PROMPT", "v2")
