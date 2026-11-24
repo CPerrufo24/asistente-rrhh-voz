@@ -26,6 +26,11 @@ const quickQuestions = [
 
 const refs = {};
 
+// El modelo marca énfasis con **texto**: se escapa todo y solo se convierte eso a <strong>.
+function pintarTexto(elemento, texto) {
+  elemento.innerHTML = escapeHtml(texto).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
 function escapeHtml(texto) {
   return texto
     .replaceAll('&', '&amp;')
@@ -117,7 +122,7 @@ function crearMensaje(rol, texto, claseExtra = '') {
     <span class="meta">${rol === 'usuario' ? 'Usuario' : rol === 'agente' ? 'Asistente' : 'Sistema'}</span>
     <div class="contenido"></div>
   `;
-  nodo.querySelector('.contenido').textContent = texto;
+  pintarTexto(nodo.querySelector('.contenido'), texto);
   refs.mensajes.appendChild(nodo);
   refs.mensajes.scrollTop = refs.mensajes.scrollHeight;
   return nodo;
@@ -128,7 +133,7 @@ function actualizarMensaje(nodo, texto, final = false) {
   // La final trae el texto completo y lo reemplaza.
   const contenido = nodo.querySelector('.contenido');
   if (final) {
-    contenido.textContent = texto;
+    pintarTexto(contenido, texto);
   } else {
     nodo.dataset.acumulado = (nodo.dataset.acumulado || '') + texto;
     contenido.textContent = nodo.dataset.acumulado;
