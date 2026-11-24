@@ -1,0 +1,16 @@
+numero_empleado,nombre,puesto,area,sede,fecha_ingreso,dias_vacaciones_tomados,jefe_directo
+E-1001,Sofía Galindo Paredes,Coordinadora de Reclutamiento,Recursos Humanos,CDMX,2023-05-12,4,Martín Hinojosa
+E-1002,Rodrigo Beltrán Canto,Analista de Nómina,Recursos Humanos,CDMX,2025-08-10,2,Sofía Galindo Paredes
+E-1003,Mariana Arce Villalpando,Supervisora de Operaciones,Operaciones,Monterrey,2021-02-20,6,Ernesto Carvajal
+E-1004,Ernesto Carvajal Sotomayor,Gerente de CEDIS,Operaciones,Monterrey,2014-04-10,8,Mariana Zúñiga
+E-1005,Valeria Téllez Mondragón,Operadora de Montacargas,Almacén,Monterrey,2026-03-15,0,Mariana Arce Villalpando
+E-1006,Héctor Cuéllar Solís,Auxiliar de Almacén,Almacén,Monterrey,2025-10-15,3,Mariana Arce Villalpando
+E-1007,Camila Covarrubias Rizo,Líder de Tráfico y Envíos,Logística,Guadalajara,2019-06-15,5,Alfonso Peñaloza
+E-1008,Alfonso Peñaloza Muro,Gerente Regional de Distribución,Logística,Guadalajara,2004-01-15,10,Mariana Zúñiga
+E-1009,Diego Salcedo Barrientos,Desarrollador de Software,Tecnología,CDMX,2026-07-01,0,Lorena Barba
+E-1010,Lorena Barba Nieves,Directora de Sistemas,Tecnología,CDMX,2014-08-20,7,Mariana Zúñiga
+E-1011,Javier Fonnegra Trejo,Especialista de Mantenimiento,Operaciones,Guadalajara,2021-11-01,4,Alfonso Peñaloza
+E-1012,Paola Del Razo Becerra,Analista de Facturación,Finanzas,CDMX,2023-09-01,5,Mateo Reséndiz
+E-1013,Mateo Reséndiz Quintanilla,Contador General,Finanzas,CDMX,2019-10-05,6,Mariana Zúñiga
+E-1014,Beatriz Landaverde Ocaña,Auxiliar de Inventarios,Almacén,Guadalajara,2026-04-01,1,Camila Covarrubias Rizo
+E-1015,Ignacio Samaniego Priego,Chofer Repartidor,Distribución,Monterrey,2022-01-10,3,Ernesto Carvajal
