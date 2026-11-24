@@ -7,6 +7,6 @@ def test_agente_tiene_herramientas():
 
 
 def test_prompt_versionado_se_carga():
-    prompt = cargar_prompt("v1")
+    prompt = cargar_prompt("v2")
     assert "<!--" not in prompt
     assert "buscar_politica" in prompt

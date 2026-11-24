@@ -45,6 +45,10 @@ def resumir_evento(evento: Any) -> list[dict[str, Any]]:
                         alerta_inyeccion = True
             elif payload.get("folio") is not None:
                 fuentes.append(str(payload["folio"]))
+            if isinstance(payload.get("fundamento"), list):
+                fuentes.extend(str(f) for f in payload["fundamento"])
+            if payload.get("numero_empleado") and payload.get("nombre"):
+                fuentes.append(f"Directorio de empleados, {payload['numero_empleado']}")
 
         item: dict[str, Any] = {
             "tipo": "tool_resultado",
