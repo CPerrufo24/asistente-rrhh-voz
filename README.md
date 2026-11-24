@@ -2,9 +2,13 @@
 
 Agente de IA que contesta las preguntas que los empleados le hacen todos los días a Recursos Humanos (vacaciones, aguinaldo, permisos, horarios, prestaciones), **citando el artículo exacto** del reglamento interno o de la Ley Federal del Trabajo, calcula saldos con los datos del empleado y **levanta un ticket a RRHH** cuando no sabe la respuesta o el caso necesita a una persona. Se usa por chat o **hablando en tiempo real**, con interrupciones.
 
-Construido con **Google ADK** y **Gemini** (texto: `gemini-3.5-flash-lite`; voz: `gemini-3.8-live`).
+Construido con **Google ADK** y **Gemini** (texto: `gemini-3.5-flash-lite`; voz: `gemini-3.8-live`; temperatura 0.2).
 
-![Interfaz](docs/img/interfaz.png)
+![Chat con la traza: la búsqueda encontró el artículo 24 y marcó la instrucción inyectada](docs/img/interfaz.png)
+
+| Voz en vivo: consulta el directorio y calcula las vacaciones | Escalamiento: no hay política de becas y crea un ticket |
+|---|---|
+| ![Conversación por voz con la traza de dos tools encadenadas](docs/img/voz-en-vivo.png) | ![Pregunta sin respuesta en los documentos y ticket RH-2026-0001](docs/img/escalamiento-ticket.png) |
 
 ## Problema y usuario
 
@@ -53,7 +57,7 @@ uv run uvicorn app.server:app --port 8000
 ### Pruebas y evaluación
 
 ```bash
-uv run pytest -q                      # 36 pruebas, sin red ni llave
+uv run pytest -q                      # 37 pruebas, sin red ni llave
 uv run ruff check .
 uv run python scripts/evaluar.py      # corre los 12 casos contra el modelo real
 ```
@@ -109,7 +113,7 @@ Medido con los 12 casos de evaluación (2026-11-23, capa gratuita de AI Studio):
 
 | Canal | Modelo | Latencia | Tokens promedio | Costo estimado |
 |---|---|---|---|---|
-| Texto | `gemini-3.5-flash-lite` | mediana **1.4 s**, máx. 2.7 s (incluye de 1 a 3 llamadas a tools) | 3,300 de entrada / 93 de salida | **≈ USD 0.001** por consulta a precio de pago tipo flash-lite (0.25 / 1.50 USD por millón); **$0 en la capa gratuita** |
+| Texto | `gemini-3.5-flash-lite` | mediana **1.3 s**, máx. 2.1 s (incluye de 1 a 3 llamadas a tools) | 3,100 de entrada / 91 de salida | **≈ USD 0.001** por consulta a precio de pago tipo flash-lite (0.25 / 1.50 USD por millón); **$0 en la capa gratuita** |
 | Voz | `gemini-3.8-live` | primer audio a **~2.1 s**, con la búsqueda incluida | audio + ~3,000 de contexto | depende de los segundos de audio; ver precios de la Live API |
 
 Por qué ese modelo de texto: `gemini-3.8-flash` también pasó los 12 casos, pero con mediana de 8.7 s (razona más antes de llamar tools), demasiado para voz y para un chat de preguntas frecuentes.
@@ -125,6 +129,16 @@ La búsqueda BM25 tarda menos de 5 ms y no cuesta nada: el costo es solo el del 
 - **Sesiones en memoria:** se pierden al reiniciar (los tickets no). Ver ADR 0005.
 - **Voz:** la transcripción puede equivocarse con números dictados; por eso el agente repite el número de empleado antes de consultarlo.
 - **Cálculo de vacaciones:** usa años cumplidos y días tomados del CSV; no maneja periodos vencidos ni la prescripción del art. 516 LFT.
+
+## Qué haría con más tiempo
+
+1. **Autenticación** con el inicio de sesión de la empresa, para que el número de empleado venga de la sesión y no de lo que dice el usuario.
+2. **Búsqueda híbrida** (BM25 + embeddings) si el corpus crece o aparecen muchos sinónimos, evaluada con los mismos casos.
+3. **Más casos de evaluación** (50 o más, con preguntas reales de RRHH) y una métrica automática de "cita la fuente correcta", corriendo en CI con una llave de prueba.
+4. **Sesiones persistentes** con `DatabaseSessionService` y una política de retención definida por RRHH.
+5. **Integraciones reales:** directorio desde el HRIS de la empresa y tickets hacia su mesa de ayuda.
+6. **Clasificador de inyección** con un modelo barato como segunda capa, si los documentos empiezan a venir de fuentes externas.
+7. **Panel para RRHH** con los tickets y las preguntas sin respuesta más frecuentes, para saber qué agregar al reglamento.
 
 ## Fuentes de datos
 
