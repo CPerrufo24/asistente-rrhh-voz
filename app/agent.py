@@ -1,6 +1,7 @@
 """Definición del agente de RRHH con Google ADK."""
 
 from google.adk.agents import Agent
+from google.genai import types
 
 from app import config
 from app.tools.empleados import consultar_empleado
@@ -24,6 +25,10 @@ def crear_agente(modelo: str = config.MODELO_TEXTO) -> Agent:
         description="Responde dudas de empleados sobre políticas de RRHH y escala a RRHH.",
         instruction=cargar_prompt(),
         tools=HERRAMIENTAS,
+        generate_content_config=types.GenerateContentConfig(
+            temperature=config.TEMPERATURA,
+            max_output_tokens=config.MAX_TOKENS_SALIDA,
+        ),
     )
 
 
