@@ -9,12 +9,12 @@
   <body>
     <div class="app">
       <header class="hero">
-        <div>
-          <p class="eyebrow">Logística Andrómeda</p>
-          <h1>Asistente de RRHH · Logística Andrómeda</h1>
-          <p class="subtitulo">
-            Chat de texto, voz en vivo y trazabilidad de herramientas en un solo lugar.
-          </p>
+        <div class="marca">
+          <span class="logo" aria-hidden="true">RH</span>
+          <div>
+            <p class="eyebrow">Logística Andrómeda</p>
+            <h1>Asistente de RRHH</h1>
+          </div>
         </div>
         <div class="acciones-hero">
           <button id="nuevaConversacion" class="secundario">Nueva conversación</button>
@@ -36,8 +36,8 @@
           <div class="composer">
             <textarea
               id="mensajeInput"
-              rows="3"
-              placeholder="Escribe tu consulta de RRHH…"
+              rows="2"
+              placeholder="Escribe tu consulta de RRHH… (Enter envía, Shift+Enter salto de línea)"
             ></textarea>
             <div class="composer-acciones">
               <button id="enviarBtn" class="principal">Enviar</button>
@@ -49,7 +49,7 @@
         <aside class="panel traza-panel">
           <div class="panel-header">
             <h2>Traza</h2>
-            <p>Herramientas llamadas, fuentes, latencia y tokens de la última respuesta.</p>
+            <p>Tools, fuentes, latencia y tokens de la última respuesta.</p>
           </div>
           <div id="metadatosUltimaRespuesta" class="metadatos"></div>
           <div id="trazaLista" class="traza-lista"></div>
