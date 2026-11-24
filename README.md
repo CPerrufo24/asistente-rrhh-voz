@@ -53,7 +53,7 @@ uv run uvicorn app.server:app --port 8000
 ### Pruebas y evaluación
 
 ```bash
-uv run pytest -q                      # 35 pruebas, sin red ni llave
+uv run pytest -q                      # 36 pruebas, sin red ni llave
 uv run ruff check .
 uv run python scripts/evaluar.py      # corre los 12 casos contra el modelo real
 ```
