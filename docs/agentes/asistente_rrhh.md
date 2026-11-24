@@ -48,6 +48,8 @@ Prueba de varios turnos por API (misma sesión): "Soy E-1004, ¿cuántos días m
 
 Voz (`gemini-3.8-live` con `run_live`): "¿Cuántos días de aguinaldo me dan?" llamó a `buscar_politica` y respondió con audio citando el artículo 14 del reglamento; primer audio a ~2.1 s.
 
+Prueba manual por voz en el navegador (2026-11-23): el agente consultó a E-1004, calculó sus vacaciones (`consultar_empleado` → `calcular_vacaciones`), respondió con voz, buscó una política inexistente sin inventar y creó el ticket `RH-2026-0002`; se pudo interrumpir a media respuesta. Esa prueba encontró dos errores de la interfaz que se corrigieron antes de integrar (PR #7: transcripciones parciales; PR #9: el audio del micrófono no se enviaba).
+
 ## Riesgos y mitigaciones
 
 | Riesgo | Mitigación |
