@@ -13,6 +13,9 @@ from app import config
 
 _K1 = 1.5
 _B = 0.75
+# Bono por cada término de la consulta que aparece en el título del artículo (multiplica su IDF).
+# El título nombra el tema ("Aguinaldo anual") y debe pesar más que palabras genéricas del cuerpo.
+PESO_TITULO = 1.5
 
 _RE_ARTICULO_LFT = re.compile(r"^###\s+Art[ií]culo\s+(.+?)\s*$", re.IGNORECASE)
 _RE_ARTICULO_REGLAMENTO = re.compile(
@@ -171,10 +174,12 @@ class IndiceBM25:
         self.fragmentos = list(fragmentos)
         self._frecuencias: list[Counter[str]] = []
         self._longitudes: list[int] = []
+        self._titulos: list[set[str]] = []
         documentos_con_palabra: Counter[str] = Counter()
 
         for fragmento in self.fragmentos:
-            tokens = normalizar(fragmento.titulo) * 2 + normalizar(fragmento.texto)
+            self._titulos.append(set(normalizar(fragmento.titulo)))
+            tokens = normalizar(fragmento.titulo) + normalizar(fragmento.texto)
             frecuencias = Counter(tokens)
             self._frecuencias.append(frecuencias)
             self._longitudes.append(len(tokens))
@@ -196,10 +201,12 @@ class IndiceBM25:
             return []
 
         puntuados: list[tuple[Fragmento, float]] = []
-        for fragmento, frecuencias, longitud in zip(
-            self.fragmentos, self._frecuencias, self._longitudes, strict=True
+        for fragmento, frecuencias, longitud, titulo in zip(
+            self.fragmentos, self._frecuencias, self._longitudes, self._titulos, strict=True
         ):
             puntaje = 0.0
+            for termino in set(terminos) & titulo:
+                puntaje += PESO_TITULO * self._idf.get(termino, 0.0)
             for termino in terminos:
                 frecuencia = frecuencias.get(termino, 0)
                 if not frecuencia:
