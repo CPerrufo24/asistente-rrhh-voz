@@ -104,3 +104,12 @@ def test_consulta_ajena_no_devuelve_resultados():
         assert resultado["resultados"] == []
     finally:
         reiniciar_indice()
+
+
+def test_titulo_pesa_mas_que_palabras_genericas():
+    """Regresión: "aguinaldo fecha pago plazo" dejaba fuera el artículo "Aguinaldo anual"."""
+    from app import rag
+
+    rag.reiniciar_indice()
+    fuentes = [f.fuente for f, _ in rag.obtener_indice().buscar("aguinaldo fecha pago plazo", 4)]
+    assert "Reglamento interno, artículo 14" in fuentes
