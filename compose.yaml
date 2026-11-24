@@ -1,0 +1,13 @@
+services:
+  asistente:
+    build: .
+    image: asistente-rrhh-voz:latest
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - datos-rrhh:/app/var
+    restart: unless-stopped
+
+volumes:
+  datos-rrhh:
