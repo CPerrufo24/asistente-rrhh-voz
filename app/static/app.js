@@ -225,9 +225,10 @@ async function crearReproduccionAudio() {
 }
 
 async function iniciarVoz() {
-  if (estado.vozActiva) {
+  if (estado.vozActiva || estado.vozConectando) {
     return;
   }
+  estado.vozConectando = true;
   if (!estado.sessionId) {
     await obtenerSesionNueva();
   }
@@ -247,8 +248,16 @@ async function iniciarVoz() {
     socket.binaryType = 'arraybuffer';
     estado.socket = socket;
 
+    // Cada bloque PCM16 de ~100 ms que produce el worklet se manda tal cual por el socket.
+    captura.nodo.port.onmessage = (evento) => {
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send(evento.data);
+      }
+    };
+
     socket.addEventListener('open', async () => {
       estado.vozActiva = true;
+      estado.vozConectando = false;
       await estado.captureContext.resume();
       await estado.playbackContext.resume();
       setEstadoVoz('Escuchando', 'escuchando');
@@ -324,6 +333,10 @@ async function iniciarVoz() {
 
 function detenerVoz(limpiarSocket = true) {
   estado.vozActiva = false;
+  estado.vozConectando = false;
+  if (estado.captureNode) {
+    estado.captureNode.port.onmessage = null;
+  }
   refs.vozBtn.textContent = 'Hablar';
   if (limpiarSocket && estado.socket) {
     estado.socket.close();
@@ -412,7 +425,7 @@ function poblarChips() {
 function enlazarEventos() {
   refs.enviarBtn.addEventListener('click', enviarChat);
   refs.vozBtn.addEventListener('click', () => {
-    if (estado.vozActiva) {
+    if (estado.vozActiva || estado.vozConectando) {
       detenerVoz();
       return;
     }
