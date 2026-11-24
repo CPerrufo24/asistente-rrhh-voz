@@ -75,3 +75,34 @@ def test_texto_final_y_uso_tokens_solo_usan_eventos_finales():
 
     assert texto_final(eventos) == "Hola mundo"
     assert uso_tokens(eventos) == {"entrada": 18, "salida": 23}
+
+
+def test_resumir_evento_incluye_fundamento_y_directorio():
+    from google.adk.events import Event
+    from google.genai import types
+
+    from app.traza import resumir_evento
+
+    evento = Event(
+        author="asistente_rrhh",
+        content=types.Content(
+            role="user",
+            parts=[
+                types.Part(
+                    function_response=types.FunctionResponse(
+                        name="calcular_vacaciones",
+                        response={"dias_disponibles": 12, "fundamento": ["LFT, artículo 76"]},
+                    )
+                ),
+                types.Part(
+                    function_response=types.FunctionResponse(
+                        name="consultar_empleado",
+                        response={"numero_empleado": "E-1001", "nombre": "Sofía"},
+                    )
+                ),
+            ],
+        ),
+    )
+    fuentes = [f for item in resumir_evento(evento) for f in item.get("fuentes", [])]
+    assert "LFT, artículo 76" in fuentes
+    assert "Directorio de empleados, E-1001" in fuentes
